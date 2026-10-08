@@ -1,0 +1,30 @@
+# Data handling and arrays (Tier 2)
+pandas
+numpy
+
+# Charts for the exploration notebook (Tier 2)
+matplotlib
+seaborn
+
+# Machine learning models and metrics (Tier 3)
+scikit-learn
+
+# Saving and loading the trained model (Lesson 38 Demo 2)
+joblib
+
+# Experiment tracking and model logging (Lesson 38 Demos 1 and 3)
+mlflow
+
+# Data versioning (documented Tier 5 exception)
+dvc
+
+# REST API, its server, and test requests (Lesson 39 Demo 1)
+fastapi
+uvicorn
+requests
+
+# Monitoring reports, pinned to match the Lesson 39 Demo 3 imports
+evidently==0.4.40
+
+# Lets VS Code run Jupyter notebooks inside the venv
+ipykernel

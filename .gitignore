@@ -1,0 +1,28 @@
+# Virtual environment: rebuilt from requirements.txt, never committed
+venv/
+
+# VS Code editor settings: specific to this Mac
+.vscode/
+
+# Python cache files created automatically when scripts run
+__pycache__/
+
+# Notebook autosave folder created by Jupyter
+.ipynb_checkpoints/
+
+# Mac system file created in every folder Finder opens
+.DS_Store
+
+# MLflow run database and artifact folder: local records, rebuilt by train.py
+mlflow.db
+mlruns/
+
+# Trained model: rebuilt by train.py locally and in GitHub Actions
+model.pkl
+
+# Processed data: versioned by DVC instead of Git
+data/processed_titanic.csv
+
+# Monitoring data files: rebuilt by train.py
+data/train_data.csv
+data/reference_data.csv

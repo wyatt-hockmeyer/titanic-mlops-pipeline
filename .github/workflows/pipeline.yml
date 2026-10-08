@@ -1,0 +1,62 @@
+# pipeline.yml
+# GitHub Actions workflow: retrains and tests the model whenever code or data changes
+# Location: .github/workflows/pipeline.yml
+
+# Name shown on the GitHub Actions page
+name: Titanic MLOps Pipeline
+
+# Events that start the pipeline
+on:
+  # Run on every push to the main branch...
+  push:
+    branches: [ "main" ]
+    # ...but only when one of these files or folders changed (documented exception: path filters)
+    paths:
+      - "data/**"
+      - "**.py"
+      - "requirements.txt"
+      - ".github/workflows/**"
+  # Also allow a manual run from the Actions tab
+  workflow_dispatch:
+
+# The work to do
+jobs:
+  # One job named train-and-test
+  train-and-test:
+    # Run on a fresh Linux machine provided by GitHub
+    runs-on: ubuntu-latest
+
+    # The steps run in order; if any step fails, the run stops and turns red
+    steps:
+      # Download the repository code onto the machine
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Install Python 3.12, the same version used on the Mac
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Install every package listed in requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Clean the raw data and add features
+      - name: Preprocess data
+        run: python preprocess.py
+
+      # Train the model, log it to MLflow, and save model.pkl
+      - name: Train model
+        run: python train.py
+
+      # Check the data and the model; a failed check fails the run
+      - name: Test model
+        run: python test_model.py
+
+      # Save the trained model so it can be downloaded from the run page
+      - name: Upload trained model
+        uses: actions/upload-artifact@v4
+        with:
+          name: titanic-model
+          path: model.pkl

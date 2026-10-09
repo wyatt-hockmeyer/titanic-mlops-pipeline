@@ -1,5 +1,5 @@
 # pipeline.yml
-# GitHub Actions workflow: retrains, tests, and packages the model whenever code or data changes
+# GitHub Actions workflow: retrains, tests, packages, and monitors the model whenever code or data changes
 # Location: .github/workflows/pipeline.yml
 
 # Name shown on the GitHub Actions page
@@ -70,9 +70,20 @@ jobs:
       - name: Test API
         run: python test_api.py
 
+      # Build the Evidently drift and performance reports and print any alerts (Lesson 39 Demo 3)
+      - name: Run monitoring
+        run: python monitor.py
+
       # Save the trained model so it can be downloaded from the run page
       - name: Upload trained model
         uses: actions/upload-artifact@v4
         with:
           name: titanic-model
           path: model.pkl
+
+      # Save the monitoring reports so they can be downloaded from the run page
+      - name: Upload monitoring reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: monitoring-reports
+          path: reports/

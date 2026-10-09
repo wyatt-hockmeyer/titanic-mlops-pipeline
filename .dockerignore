@@ -1,0 +1,6 @@
+# Folders and files Docker skips when building, which keeps the build fast and the image small
+venv/
+.git/
+mlruns/
+mlflow.db
+data/

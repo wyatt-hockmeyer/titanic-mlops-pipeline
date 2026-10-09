@@ -1,5 +1,5 @@
 # pipeline.yml
-# GitHub Actions workflow: retrains and tests the model whenever code or data changes
+# GitHub Actions workflow: retrains, tests, and packages the model whenever code or data changes
 # Location: .github/workflows/pipeline.yml
 
 # Name shown on the GitHub Actions page
@@ -15,6 +15,8 @@ on:
       - "data/**"
       - "**.py"
       - "requirements.txt"
+      - "requirements-api.txt"
+      - "Dockerfile"
       - ".github/workflows/**"
   # Also allow a manual run from the Actions tab
   workflow_dispatch:
@@ -53,6 +55,20 @@ jobs:
       # Check the data and the model; a failed check fails the run
       - name: Test model
         run: python test_model.py
+
+      # Package the API and the new model into a Docker image (Lesson 39 Demo 2)
+      - name: Build Docker image
+        run: docker build -t titanic-api:v1 .
+
+      # Start the container in the background, then wait for the API to load
+      - name: Start API container
+        run: |
+          docker run -d -p 8000:8000 titanic-api:v1
+          sleep 15
+
+      # Send test requests to the running container
+      - name: Test API
+        run: python test_api.py
 
       # Save the trained model so it can be downloaded from the run page
       - name: Upload trained model
